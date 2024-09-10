@@ -22,3 +22,11 @@ variable "rds_port" {
 variable "bucket_mlflow_name" {
   type = string
 }
+
+variable "role_mlflow_arn" {
+  type = string
+}
+
+variable "cluster_name" {
+  type = string
+}

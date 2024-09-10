@@ -13,11 +13,18 @@ locals {
   }
 }
 
-module "bucket_mlflow" {
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 4.1"
+data "aws_iam_policy_document" "eks_pod_identity_assume_role_policy" {
+  statement {
+    effect = "Allow"
 
-  bucket = local.mlflow_bucket_name
+    principals {
+      type        = "Service"
+      identifiers = ["pods.eks.amazonaws.com"]
+    }
 
-  tags = local.tags
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession"
+    ]
+  }
 }
