@@ -12,19 +12,3 @@ locals {
     Component = "apps"
   }
 }
-
-data "aws_iam_policy_document" "eks_pod_identity_assume_role_policy" {
-  statement {
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["pods.eks.amazonaws.com"]
-    }
-
-    actions = [
-      "sts:AssumeRole",
-      "sts:TagSession"
-    ]
-  }
-}

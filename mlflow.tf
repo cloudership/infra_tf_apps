@@ -38,9 +38,3 @@ resource "aws_iam_policy" "mlflow" {
   name   = "${title(var.project_name)}MLflow"
   policy = data.aws_iam_policy_document.mlflow.json
 }
-
-resource "aws_iam_role" "mlflow" {
-  name                = "${title(var.project_name)}MLflowPod"
-  assume_role_policy  = data.aws_iam_policy_document.eks_pod_identity_assume_role_policy.json
-  managed_policy_arns = [aws_iam_policy.mlflow.arn]
-}

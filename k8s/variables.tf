@@ -23,10 +23,14 @@ variable "bucket_mlflow_name" {
   type = string
 }
 
-variable "role_mlflow_arn" {
+variable "policy_mlflow_arn" {
   type = string
 }
 
-variable "cluster_name" {
+variable "eks_cluster_main_oidc_provider_name" {
+  type = string
+}
+
+variable "eks_cluster_main_oidc_provider_arn" {
   type = string
 }

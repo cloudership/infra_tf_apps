@@ -11,5 +11,6 @@ variable "aws_region" {
 }
 
 variable "bucket_prefix" {
+  type        = string
   description = "Bucket prefix for S3 buckets - append it with a '-' before bucket names"
 }

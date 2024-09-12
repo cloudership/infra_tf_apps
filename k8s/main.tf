@@ -32,19 +32,48 @@ resource "kubernetes_config_map" "apps_iac_config" {
   }
 }
 
-resource "kubernetes_service_account" "mlflow" {
-  metadata {
-    namespace   = kubernetes_namespace.apps.metadata[0].name
-    name        = "mlflow"
-    annotations = local.tags
+data "aws_iam_policy_document" "eks_oidc_assume_role_mlflow" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Federated"
+      identifiers = [var.eks_cluster_main_oidc_provider_arn]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${var.eks_cluster_main_oidc_provider_name}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${var.eks_cluster_main_oidc_provider_name}:sub"
+      values   = ["system:serviceaccount:${kubernetes_namespace.apps.metadata[0].name}:mlflow"]
+    }
+
+    actions = [
+      "sts:AssumeRole",
+      "sts:AssumeRoleWithWebIdentity",
+      "sts:TagSession",
+    ]
   }
 }
 
-resource "aws_eks_pod_identity_association" "mlflow" {
-  cluster_name    = var.cluster_name
-  namespace       = kubernetes_namespace.apps.metadata[0].name
-  service_account = kubernetes_service_account.mlflow.metadata[0].name
-  role_arn        = var.role_mlflow_arn
+resource "aws_iam_role" "mlflow" {
+  name                = "${title(var.project_name)}MLflow"
+  managed_policy_arns = [var.policy_mlflow_arn]
 
-  tags = local.tags
+  assume_role_policy = data.aws_iam_policy_document.eks_oidc_assume_role_mlflow.json
+}
+
+resource "kubernetes_service_account" "mlflow" {
+  metadata {
+    namespace = kubernetes_namespace.apps.metadata[0].name
+    name      = "mlflow"
+    annotations = merge(local.tags, {
+      "eks.amazonaws.com/role-arn" = aws_iam_role.mlflow.arn
+    })
+  }
 }
