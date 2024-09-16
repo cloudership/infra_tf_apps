@@ -27,6 +27,10 @@ variable "policy_mlflow_arn" {
   type = string
 }
 
+variable "eks_cluster_main_name" {
+  type = string
+}
+
 variable "eks_cluster_main_oidc_provider_name" {
   type = string
 }

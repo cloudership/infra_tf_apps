@@ -11,6 +11,28 @@ locals {
   }
 }
 
+data "aws_eks_cluster" "main_eks_cluster" {
+  name = var.eks_cluster_main_name
+}
+
+data "aws_eks_cluster_auth" "main_eks_cluster" {
+  name = var.eks_cluster_main_name
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.main_eks_cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.main_eks_cluster.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.main_eks_cluster.token
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.main_eks_cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.main_eks_cluster.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.main_eks_cluster.token
+  }
+}
+
 resource "kubernetes_namespace" "apps" {
   metadata {
     name        = "apps"
