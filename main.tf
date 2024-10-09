@@ -17,7 +17,7 @@ module "apps_k8s" {
   env_name              = var.env_name
   project_name          = var.project_name
   eks_cluster_main_name = var.eks_cluster_main_name
-  role_mlflow_arn       = aws_iam_role.mlflow.arn
+  role_mlflow_arn       = module.service_role_mlflow.role_arn
 
   config_namespace_apps = {
     DB_HOSTNAME         = var.rds_hostname
