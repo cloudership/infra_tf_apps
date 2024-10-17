@@ -43,7 +43,7 @@ module "service_role_mlflow" {
   project_name                        = var.project_name
   tags                                = local.tags
   namespace                           = "apps"
-  service_name                        = "mlflow"
+  service_account_names               = ["mlflow"]
   pascal_case_service_name            = "MLflow"
   policy_document_json                = data.aws_iam_policy_document.mlflow.json
   eks_cluster_main_oidc_provider_arn  = var.eks_cluster_main_oidc_provider_arn

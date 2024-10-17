@@ -10,9 +10,9 @@ variable "namespace" {
   type = string
 }
 
-variable "service_name" {
-  type        = string
-  description = "Name of service (e.g. mlflow, geo_locator, chaos_monkey_monitor)"
+variable "service_account_names" {
+  type        = list(string)
+  description = "List of EKS service account names that can assume the generated role"
 }
 
 variable "pascal_case_service_name" {

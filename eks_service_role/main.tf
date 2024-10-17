@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "eks_oidc_assume_role" {
     condition {
       test     = "StringEquals"
       variable = "${var.eks_cluster_main_oidc_provider_name}:sub"
-      values   = ["system:serviceaccount:${var.namespace}:${var.service_name}"]
+      values   = [for s in var.service_account_names : "system:serviceaccount:${var.namespace}:${s}"]
     }
 
     actions = [
