@@ -20,8 +20,6 @@ module "apps_k8s" {
   role_mlflow_arn       = module.service_role_mlflow.role_arn
 
   config_namespace_apps = {
-    DB_HOSTNAME        = var.rds_hostname
-    DB_PORT            = var.rds_port
     MLFLOW_BUCKET_NAME = local.mlflow_bucket_name
   }
 }

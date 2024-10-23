@@ -19,15 +19,6 @@ variable "bucket_prefix" {
   description = "Bucket prefix for S3 buckets - append it with a '-' before bucket names"
 }
 
-variable "rds_hostname" {
-  description = "Hostname of the base RDS instance"
-}
-
-variable "rds_port" {
-  description = "Port of the base RDS instance"
-  type        = number
-}
-
 variable "eks_cluster_main_name" {
   type = string
 }
@@ -39,8 +30,6 @@ variable "eks_cluster_main_oidc_provider_name" {
 variable "eks_cluster_main_oidc_provider_arn" {
   type = string
 }
-
-variable "eks_cluster_main_sg_id" { type = string }
 
 variable "alb_public_zone_id" { type = string }
 
